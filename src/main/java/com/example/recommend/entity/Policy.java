@@ -14,7 +14,7 @@ public class Policy {
     private String policyTitle;
 
     @Column(name = "pubdate")
-    private Date policyDate;
+    private String policyDate;
 
     @Column(name = "tag")
     private String tag;
@@ -38,11 +38,11 @@ public class Policy {
         this.policyTitle = policyTitle;
     }
 
-    public Date getPolicyDate() {
+    public String getPolicyDate() {
         return policyDate;
     }
 
-    public void setPolicyDate(Date policyDate) {
+    public void setPolicyDate(String policyDate) {
         this.policyDate = policyDate;
     }
 
