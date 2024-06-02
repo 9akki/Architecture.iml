@@ -1,6 +1,8 @@
 server:
-  port: 8980
+  port: 8099
 spring:
+  main:
+    allow-bean-definition-overriding: true
   datasource:
     druid:
       driver-class-name: com.mysql.cj.jdbc.Driver
@@ -10,6 +12,17 @@ spring:
       initial-size: 1
       min-idle: 1
       max-active: 20
+  redis:
+    host: localhost
+    port: 6379
+
+jpa:
+  hibernate:
+    ddl-auto: update
+  show-sql: true
+  properties:
+    hibernate:
+      dialect: org.hibernate.dialect.MySQL5Dialect
 
 mybatis:
     type-aliases-package: com/example/architecture/demos/web/entity

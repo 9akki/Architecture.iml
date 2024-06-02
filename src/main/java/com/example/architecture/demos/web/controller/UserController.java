@@ -1,40 +1,18 @@
 package com.example.architecture.demos.web.controller;
 
-import com.example.architecture.demos.web.dto.CollectionResponse;
 import com.example.architecture.demos.web.dto.LoginResponse;
-import com.example.architecture.demos.web.dto.PolicyCollection;
-import com.example.architecture.demos.web.dto.UserInfoResponse;
-import com.example.architecture.demos.web.entity.Policy;
-import com.example.architecture.demos.web.entity.PolicyJSON;
-import com.example.architecture.demos.web.entity.UserInfo;
-import com.example.architecture.demos.web.service.BookmarkService;
-import com.example.architecture.demos.web.service.UserInfoService;
 import com.example.architecture.demos.web.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/user")
 public class UserController {
     @Autowired
     UserServiceImpl userService;
-    @Autowired
-    UserInfoService userInfoSercvice;
-    @Autowired
-    BookmarkService bookmarkService;
 
-
-    /**
-     * 登录
-     * @param username
-     * @param password
-     * @return
-     */
     @PostMapping("/login")
     public LoginResponse login(String username, String password){
         try {
@@ -45,44 +23,5 @@ public class UserController {
             System.out.println("密码错误");
             return new LoginResponse(201, "请求失败");
         }
-    }
-
-    /**
-     * 获取用户信息
-     * @param username
-     * @return
-     */
-    @GetMapping(value = "/info/{username}")
-    public UserInfoResponse info(@PathVariable(value = "username")String username) {
-        UserInfo userInfo = userInfoSercvice.getUserInfoByUsername(username);
-        if(userInfo != null) {
-            return new UserInfoResponse(200,userInfo,"请求成功");
-        }
-        return new UserInfoResponse(201,null,"请求失败");
-    }
-
-    @GetMapping(value = "/collection/{username}")
-    public CollectionResponse collection(@PathVariable(value = "username")String username) {
-        List<Policy> policies = bookmarkService.getPoliciesByUsername(username);
-        if (policies != null) {
-            List<PolicyJSON> policiesJSON = new ArrayList<>();
-            for (Policy policy : policies) {
-                PolicyJSON policyJSON = new PolicyJSON();
-                // 将从数据库中获得的数据修改成合适的JSON格式数据
-                policyJSON.setId(policy.getId());
-                policyJSON.setPolicy_id(policy.getPolicy_id());
-                policyJSON.setTitle(policy.getTitle());
-                policyJSON.setSource(policy.getSource());
-                policyJSON.setSourceurl(policy.getSourceurl());
-                policyJSON.setPubDate(policy.getPubDate());
-                policyJSON.setNumber(policy.getNumber());
-                policyJSON.setLevel(policy.getLevel());
-                policyJSON.setContent(policy.getContent());
-                policyJSON.setFileurl(policy.getFileurl());
-                policiesJSON.add(policyJSON);
-            }
-            return new CollectionResponse(200, new PolicyCollection(policiesJSON), "请求成功");
-        }
-        return new CollectionResponse(201,null,"请求失败");
     }
 }
